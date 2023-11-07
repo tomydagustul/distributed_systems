@@ -1,0 +1,10 @@
+services:
+  devicesapi:
+    container_name: devicesAPI_container
+    image: devicesapi_image:latest
+    build:
+      context: .
+      dockerfile: DevicesAPI/Dockerfile
+      target: final
+    ports:
+      - 8080:80

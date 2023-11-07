@@ -1,5 +1,7 @@
 using DevicesAPI;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.HttpLogging;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 var app = builder.Build();
 
 var devices = app.MapGroup("/devices");
+
+
 
 //Gets
 devices.MapGet("/", async (DevicesDb db) =>
@@ -49,8 +53,9 @@ devices.MapPut("/{id}", async (int id, Devices input_device, DevicesDb db) =>
     if (!String.IsNullOrEmpty(input_device.adress))
         device.adress = input_device.adress;
 
-    if (!String.IsNullOrEmpty(input_device.maximum_hourly_energy_consumption))
-        device.maximum_hourly_energy_consumption = input_device.maximum_hourly_energy_consumption;
+    if (input_device.kWh_energy_consumption > 0)
+        device.kWh_energy_consumption = input_device.kWh_energy_consumption;
+    else device.kWh_energy_consumption = null;
 
     await db.SaveChangesAsync();
 
@@ -64,9 +69,10 @@ devices.MapDelete("/{id}", async (int id, DevicesDb db) =>
     {
         db.Devices.Remove(device);
         await db.SaveChangesAsync();
+        Console.WriteLine("deleted 1 item from DB");
         return Results.NoContent();
     }
-
+    Console.WriteLine("tried to delete a ghost itm");
     return Results.NotFound();
 });
 
