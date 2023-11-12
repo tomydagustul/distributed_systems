@@ -69,7 +69,7 @@ devices.MapDelete("/{id}", async (int id, DevicesDb db) =>
     {
         db.Devices.Remove(device);
         await db.SaveChangesAsync();
-        Console.WriteLine("deleted 1 item from DB");
+        Console.WriteLine($"deleted 1 item with id = {id}");
         return Results.NoContent();
     }
     Console.WriteLine("tried to delete a ghost itm");
