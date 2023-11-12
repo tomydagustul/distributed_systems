@@ -20,7 +20,7 @@ var app = builder.Build();
 var devices = app.MapGroup("/devices");
 
 
-
+#region
 //Gets
 devices.MapGet("/", async (DevicesDb db) =>
     await db.Devices.ToListAsync());
